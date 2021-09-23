@@ -1,0 +1,548 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+  <!-- EF Runtime content -->
+  <edmx:Runtime>
+    <!-- SSDL content -->
+    <edmx:StorageModels>
+      <Schema Namespace="PENITENTIARYModel.Store" Provider="System.Data.SqlClient" ProviderManifestToken="2012" Alias="Self" xmlns:store="http://schemas.microsoft.com/ado/2007/12/edm/EntityStoreSchemaGenerator" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm/ssdl">
+        <EntityType Name="Crimes">
+          <Key>
+            <PropertyRef Name="CrimeID" />
+          </Key>
+          <Property Name="CrimeID" Type="int" Nullable="false" />
+          <Property Name="CrimeName" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PENITENTIARY.dbo.CriminalCase' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="CriminalCases">
+          <Key>
+            <PropertyRef Name="CriminalCaseID" />
+          </Key>
+          <Property Name="CriminalCaseID" Type="int" Nullable="false" />
+          <Property Name="CriminalCase" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="JudicialCaseID" Type="int" Nullable="false" />
+          <Property Name="CrimeID" Type="int" Nullable="false" />
+          <Property Name="DateEnd" Type="date" />
+          <Property Name="Sentence" Type="nchar" MaxLength="10" />
+          <Property Name="DateMin" Type="date" />
+          <Property Name="DateUpdate" Type="date" Nullable="false" />
+        </EntityType>
+        <EntityType Name="CriminalCourts">
+          <Key>
+            <PropertyRef Name="CriminalCourtID" />
+          </Key>
+          <Property Name="CriminalCourtID" Type="int" Nullable="false" />
+          <Property Name="CriminalCourtName" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Departaments">
+          <Key>
+            <PropertyRef Name="DepartamentID" />
+          </Key>
+          <Property Name="DepartamentID" Type="int" Nullable="false" />
+          <Property Name="DepartamentName" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <!--Errores durante la generación:
+advertencia 6002: La tabla o vista 'PENITENTIARY.dbo.History' no tiene definida ninguna clave principal. Se ha inferido la clave y la definición se creado como una vista o tabla de solo lectura.-->
+        <EntityType Name="History">
+          <Key>
+            <PropertyRef Name="HistoryID" />
+            <PropertyRef Name="PrisonerID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Type" />
+            <PropertyRef Name="Detail" />
+          </Key>
+          <Property Name="HistoryID" Type="int" Nullable="false" />
+          <Property Name="PrisonerID" Type="int" Nullable="false" />
+          <Property Name="Date" Type="date" Nullable="false" />
+          <Property Name="Type" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Detail" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Comment" Type="nchar" MaxLength="10" />
+        </EntityType>
+        <EntityType Name="JudicialCases">
+          <Key>
+            <PropertyRef Name="JudicialCaseID" />
+          </Key>
+          <Property Name="JudicialCaseID" Type="int" Nullable="false" />
+          <Property Name="CriminalCourtID" Type="int" Nullable="false" />
+          <Property Name="DepartamentID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="PrisionerCases">
+          <Key>
+            <PropertyRef Name="PrisionerCasesID" />
+          </Key>
+          <Property Name="PrisionerCasesID" Type="int" Nullable="false" />
+          <Property Name="PrisionerID" Type="int" Nullable="false" />
+          <Property Name="CriminalCaseID" Type="int" Nullable="false" />
+        </EntityType>
+        <EntityType Name="Prisoners">
+          <Key>
+            <PropertyRef Name="PrisonerID" />
+          </Key>
+          <Property Name="PrisonerID" Type="int" Nullable="false" />
+          <Property Name="CriminologicalCode" Type="int" Nullable="false" />
+          <Property Name="FileCode" Type="int" Nullable="false" />
+          <Property Name="FirstName" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="SecondName" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="Surname" Type="nchar" MaxLength="10" Nullable="false" />
+          <Property Name="NationalID" Type="nchar" MaxLength="10" Nullable="false" />
+        </EntityType>
+        <Association Name="FK_CriminalCases_Crimes">
+          <End Role="Crimes" Type="Self.Crimes" Multiplicity="1" />
+          <End Role="CriminalCases" Type="Self.CriminalCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Crimes">
+              <PropertyRef Name="CrimeID" />
+            </Principal>
+            <Dependent Role="CriminalCases">
+              <PropertyRef Name="CrimeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CriminalCases_JudicialCases">
+          <End Role="JudicialCases" Type="Self.JudicialCases" Multiplicity="1" />
+          <End Role="CriminalCases" Type="Self.CriminalCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JudicialCases">
+              <PropertyRef Name="JudicialCaseID" />
+            </Principal>
+            <Dependent Role="CriminalCases">
+              <PropertyRef Name="JudicialCaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_History_Prisoners">
+          <End Role="Prisoners" Type="Self.Prisoners" Multiplicity="1" />
+          <End Role="History" Type="Self.History" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Prisoners">
+              <PropertyRef Name="PrisonerID" />
+            </Principal>
+            <Dependent Role="History">
+              <PropertyRef Name="PrisonerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JudicialCases_CriminalCourts">
+          <End Role="CriminalCourts" Type="Self.CriminalCourts" Multiplicity="1" />
+          <End Role="JudicialCases" Type="Self.JudicialCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CriminalCourts">
+              <PropertyRef Name="CriminalCourtID" />
+            </Principal>
+            <Dependent Role="JudicialCases">
+              <PropertyRef Name="CriminalCourtID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JudicialCases_Departaments">
+          <End Role="Departaments" Type="Self.Departaments" Multiplicity="1" />
+          <End Role="JudicialCases" Type="Self.JudicialCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departaments">
+              <PropertyRef Name="DepartamentID" />
+            </Principal>
+            <Dependent Role="JudicialCases">
+              <PropertyRef Name="DepartamentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrisionerCases_CriminalCases">
+          <End Role="CriminalCases" Type="Self.CriminalCases" Multiplicity="1" />
+          <End Role="PrisionerCases" Type="Self.PrisionerCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CriminalCases">
+              <PropertyRef Name="CriminalCaseID" />
+            </Principal>
+            <Dependent Role="PrisionerCases">
+              <PropertyRef Name="CriminalCaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrisionerCases_Prisoners">
+          <End Role="Prisoners" Type="Self.Prisoners" Multiplicity="1" />
+          <End Role="PrisionerCases" Type="Self.PrisionerCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Prisoners">
+              <PropertyRef Name="PrisonerID" />
+            </Principal>
+            <Dependent Role="PrisionerCases">
+              <PropertyRef Name="PrisionerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PENITENTIARYModelStoreContainer">
+          <EntitySet Name="Crimes" EntityType="Self.Crimes" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CriminalCases" EntityType="Self.CriminalCases" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="CriminalCourts" EntityType="Self.CriminalCourts" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Departaments" EntityType="Self.Departaments" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="JudicialCases" EntityType="Self.JudicialCases" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="PrisionerCases" EntityType="Self.PrisionerCases" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="Prisoners" EntityType="Self.Prisoners" Schema="dbo" store:Type="Tables" />
+          <EntitySet Name="History" EntityType="Self.History" store:Type="Tables" store:Schema="dbo">
+            <DefiningQuery>SELECT 
+    [History].[HistoryID] AS [HistoryID], 
+    [History].[PrisonerID] AS [PrisonerID], 
+    [History].[Date] AS [Date], 
+    [History].[Type] AS [Type], 
+    [History].[Detail] AS [Detail], 
+    [History].[Comment] AS [Comment]
+    FROM [dbo].[History] AS [History]</DefiningQuery>
+          </EntitySet>
+          <AssociationSet Name="FK_CriminalCases_Crimes" Association="Self.FK_CriminalCases_Crimes">
+            <End Role="Crimes" EntitySet="Crimes" />
+            <End Role="CriminalCases" EntitySet="CriminalCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CriminalCases_JudicialCases" Association="Self.FK_CriminalCases_JudicialCases">
+            <End Role="JudicialCases" EntitySet="JudicialCases" />
+            <End Role="CriminalCases" EntitySet="CriminalCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_History_Prisoners" Association="Self.FK_History_Prisoners">
+            <End Role="Prisoners" EntitySet="Prisoners" />
+            <End Role="History" EntitySet="History" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JudicialCases_CriminalCourts" Association="Self.FK_JudicialCases_CriminalCourts">
+            <End Role="CriminalCourts" EntitySet="CriminalCourts" />
+            <End Role="JudicialCases" EntitySet="JudicialCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JudicialCases_Departaments" Association="Self.FK_JudicialCases_Departaments">
+            <End Role="Departaments" EntitySet="Departaments" />
+            <End Role="JudicialCases" EntitySet="JudicialCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrisionerCases_CriminalCases" Association="Self.FK_PrisionerCases_CriminalCases">
+            <End Role="CriminalCases" EntitySet="CriminalCases" />
+            <End Role="PrisionerCases" EntitySet="PrisionerCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrisionerCases_Prisoners" Association="Self.FK_PrisionerCases_Prisoners">
+            <End Role="Prisoners" EntitySet="Prisoners" />
+            <End Role="PrisionerCases" EntitySet="PrisionerCases" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:StorageModels>
+    <!-- CSDL content -->
+    <edmx:ConceptualModels>
+      <Schema Namespace="PENITENTIARYModel" Alias="Self" annotation:UseStrongSpatialTypes="false" xmlns:annotation="http://schemas.microsoft.com/ado/2009/02/edm/annotation" xmlns:customannotation="http://schemas.microsoft.com/ado/2013/11/edm/customannotation" xmlns="http://schemas.microsoft.com/ado/2009/11/edm">
+        <EntityType Name="Crimes">
+          <Key>
+            <PropertyRef Name="CrimeID" />
+          </Key>
+          <Property Name="CrimeID" Type="Int32" Nullable="false" />
+          <Property Name="CrimeName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="CriminalCases" Relationship="Self.FK_CriminalCases_Crimes" FromRole="Crimes" ToRole="CriminalCases" />
+        </EntityType>
+        <EntityType Name="CriminalCases">
+          <Key>
+            <PropertyRef Name="CriminalCaseID" />
+          </Key>
+          <Property Name="CriminalCaseID" Type="Int32" Nullable="false" />
+          <Property Name="CriminalCase" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="JudicialCaseID" Type="Int32" Nullable="false" />
+          <Property Name="CrimeID" Type="Int32" Nullable="false" />
+          <Property Name="DateEnd" Type="DateTime" Precision="0" />
+          <Property Name="Sentence" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <Property Name="DateMin" Type="DateTime" Precision="0" />
+          <Property Name="DateUpdate" Type="DateTime" Nullable="false" Precision="0" />
+          <NavigationProperty Name="Crimes" Relationship="Self.FK_CriminalCases_Crimes" FromRole="CriminalCases" ToRole="Crimes" />
+          <NavigationProperty Name="JudicialCases" Relationship="Self.FK_CriminalCases_JudicialCases" FromRole="CriminalCases" ToRole="JudicialCases" />
+          <NavigationProperty Name="PrisionerCases" Relationship="Self.FK_PrisionerCases_CriminalCases" FromRole="CriminalCases" ToRole="PrisionerCases" />
+        </EntityType>
+        <EntityType Name="CriminalCourts">
+          <Key>
+            <PropertyRef Name="CriminalCourtID" />
+          </Key>
+          <Property Name="CriminalCourtID" Type="Int32" Nullable="false" />
+          <Property Name="CriminalCourtName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="JudicialCases" Relationship="Self.FK_JudicialCases_CriminalCourts" FromRole="CriminalCourts" ToRole="JudicialCases" />
+        </EntityType>
+        <EntityType Name="Departaments">
+          <Key>
+            <PropertyRef Name="DepartamentID" />
+          </Key>
+          <Property Name="DepartamentID" Type="Int32" Nullable="false" />
+          <Property Name="DepartamentName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="JudicialCases" Relationship="Self.FK_JudicialCases_Departaments" FromRole="Departaments" ToRole="JudicialCases" />
+        </EntityType>
+        <EntityType Name="JudicialCases">
+          <Key>
+            <PropertyRef Name="JudicialCaseID" />
+          </Key>
+          <Property Name="JudicialCaseID" Type="Int32" Nullable="false" />
+          <Property Name="CriminalCourtID" Type="Int32" Nullable="false" />
+          <Property Name="DepartamentID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CriminalCases" Relationship="Self.FK_CriminalCases_JudicialCases" FromRole="JudicialCases" ToRole="CriminalCases" />
+          <NavigationProperty Name="CriminalCourts" Relationship="Self.FK_JudicialCases_CriminalCourts" FromRole="JudicialCases" ToRole="CriminalCourts" />
+          <NavigationProperty Name="Departaments" Relationship="Self.FK_JudicialCases_Departaments" FromRole="JudicialCases" ToRole="Departaments" />
+        </EntityType>
+        <EntityType Name="PrisionerCases">
+          <Key>
+            <PropertyRef Name="PrisionerCasesID" />
+          </Key>
+          <Property Name="PrisionerCasesID" Type="Int32" Nullable="false" />
+          <Property Name="PrisionerID" Type="Int32" Nullable="false" />
+          <Property Name="CriminalCaseID" Type="Int32" Nullable="false" />
+          <NavigationProperty Name="CriminalCases" Relationship="Self.FK_PrisionerCases_CriminalCases" FromRole="PrisionerCases" ToRole="CriminalCases" />
+          <NavigationProperty Name="Prisoners" Relationship="Self.FK_PrisionerCases_Prisoners" FromRole="PrisionerCases" ToRole="Prisoners" />
+        </EntityType>
+        <EntityType Name="Prisoners">
+          <Key>
+            <PropertyRef Name="PrisonerID" />
+          </Key>
+          <Property Name="PrisonerID" Type="Int32" Nullable="false" />
+          <Property Name="CriminologicalCode" Type="Int32" Nullable="false" />
+          <Property Name="FileCode" Type="Int32" Nullable="false" />
+          <Property Name="FirstName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="SecondName" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Surname" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="NationalID" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <NavigationProperty Name="PrisionerCases" Relationship="Self.FK_PrisionerCases_Prisoners" FromRole="Prisoners" ToRole="PrisionerCases" />
+          <NavigationProperty Name="History" Relationship="Self.FK_History_Prisoners" FromRole="Prisoners" ToRole="History" />
+        </EntityType>
+        <EntityType Name="History">
+          <Key>
+            <PropertyRef Name="HistoryID" />
+            <PropertyRef Name="PrisonerID" />
+            <PropertyRef Name="Date" />
+            <PropertyRef Name="Type" />
+            <PropertyRef Name="Detail" />
+          </Key>
+          <Property Name="HistoryID" Type="Int32" Nullable="false" />
+          <Property Name="PrisonerID" Type="Int32" Nullable="false" />
+          <Property Name="Date" Type="DateTime" Nullable="false" Precision="0" />
+          <Property Name="Type" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Detail" Type="String" MaxLength="10" FixedLength="true" Unicode="true" Nullable="false" />
+          <Property Name="Comment" Type="String" MaxLength="10" FixedLength="true" Unicode="true" />
+          <NavigationProperty Name="Prisoners" Relationship="Self.FK_History_Prisoners" FromRole="History" ToRole="Prisoners" />
+        </EntityType>
+        <Association Name="FK_CriminalCases_Crimes">
+          <End Role="Crimes" Type="Self.Crimes" Multiplicity="1" />
+          <End Role="CriminalCases" Type="Self.CriminalCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Crimes">
+              <PropertyRef Name="CrimeID" />
+            </Principal>
+            <Dependent Role="CriminalCases">
+              <PropertyRef Name="CrimeID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_CriminalCases_JudicialCases">
+          <End Role="JudicialCases" Type="Self.JudicialCases" Multiplicity="1" />
+          <End Role="CriminalCases" Type="Self.CriminalCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="JudicialCases">
+              <PropertyRef Name="JudicialCaseID" />
+            </Principal>
+            <Dependent Role="CriminalCases">
+              <PropertyRef Name="JudicialCaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrisionerCases_CriminalCases">
+          <End Role="CriminalCases" Type="Self.CriminalCases" Multiplicity="1" />
+          <End Role="PrisionerCases" Type="Self.PrisionerCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CriminalCases">
+              <PropertyRef Name="CriminalCaseID" />
+            </Principal>
+            <Dependent Role="PrisionerCases">
+              <PropertyRef Name="CriminalCaseID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JudicialCases_CriminalCourts">
+          <End Role="CriminalCourts" Type="Self.CriminalCourts" Multiplicity="1" />
+          <End Role="JudicialCases" Type="Self.JudicialCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="CriminalCourts">
+              <PropertyRef Name="CriminalCourtID" />
+            </Principal>
+            <Dependent Role="JudicialCases">
+              <PropertyRef Name="CriminalCourtID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_JudicialCases_Departaments">
+          <End Role="Departaments" Type="Self.Departaments" Multiplicity="1" />
+          <End Role="JudicialCases" Type="Self.JudicialCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Departaments">
+              <PropertyRef Name="DepartamentID" />
+            </Principal>
+            <Dependent Role="JudicialCases">
+              <PropertyRef Name="DepartamentID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_PrisionerCases_Prisoners">
+          <End Role="Prisoners" Type="Self.Prisoners" Multiplicity="1" />
+          <End Role="PrisionerCases" Type="Self.PrisionerCases" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Prisoners">
+              <PropertyRef Name="PrisonerID" />
+            </Principal>
+            <Dependent Role="PrisionerCases">
+              <PropertyRef Name="PrisionerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <Association Name="FK_History_Prisoners">
+          <End Role="Prisoners" Type="Self.Prisoners" Multiplicity="1" />
+          <End Role="History" Type="Self.History" Multiplicity="*" />
+          <ReferentialConstraint>
+            <Principal Role="Prisoners">
+              <PropertyRef Name="PrisonerID" />
+            </Principal>
+            <Dependent Role="History">
+              <PropertyRef Name="PrisonerID" />
+            </Dependent>
+          </ReferentialConstraint>
+        </Association>
+        <EntityContainer Name="PenitentiaryContext" annotation:LazyLoadingEnabled="true">
+          <EntitySet Name="Crimes" EntityType="Self.Crimes" />
+          <EntitySet Name="CriminalCases" EntityType="Self.CriminalCases" />
+          <EntitySet Name="CriminalCourts" EntityType="Self.CriminalCourts" />
+          <EntitySet Name="Departaments" EntityType="Self.Departaments" />
+          <EntitySet Name="JudicialCases" EntityType="Self.JudicialCases" />
+          <EntitySet Name="PrisionerCases" EntityType="Self.PrisionerCases" />
+          <EntitySet Name="Prisoners" EntityType="Self.Prisoners" />
+          <EntitySet Name="History" EntityType="Self.History" />
+          <AssociationSet Name="FK_CriminalCases_Crimes" Association="Self.FK_CriminalCases_Crimes">
+            <End Role="Crimes" EntitySet="Crimes" />
+            <End Role="CriminalCases" EntitySet="CriminalCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_CriminalCases_JudicialCases" Association="Self.FK_CriminalCases_JudicialCases">
+            <End Role="JudicialCases" EntitySet="JudicialCases" />
+            <End Role="CriminalCases" EntitySet="CriminalCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrisionerCases_CriminalCases" Association="Self.FK_PrisionerCases_CriminalCases">
+            <End Role="CriminalCases" EntitySet="CriminalCases" />
+            <End Role="PrisionerCases" EntitySet="PrisionerCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JudicialCases_CriminalCourts" Association="Self.FK_JudicialCases_CriminalCourts">
+            <End Role="CriminalCourts" EntitySet="CriminalCourts" />
+            <End Role="JudicialCases" EntitySet="JudicialCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_JudicialCases_Departaments" Association="Self.FK_JudicialCases_Departaments">
+            <End Role="Departaments" EntitySet="Departaments" />
+            <End Role="JudicialCases" EntitySet="JudicialCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_PrisionerCases_Prisoners" Association="Self.FK_PrisionerCases_Prisoners">
+            <End Role="Prisoners" EntitySet="Prisoners" />
+            <End Role="PrisionerCases" EntitySet="PrisionerCases" />
+          </AssociationSet>
+          <AssociationSet Name="FK_History_Prisoners" Association="Self.FK_History_Prisoners">
+            <End Role="Prisoners" EntitySet="Prisoners" />
+            <End Role="History" EntitySet="History" />
+          </AssociationSet>
+        </EntityContainer>
+      </Schema>
+    </edmx:ConceptualModels>
+    <!-- C-S mapping content -->
+    <edmx:Mappings>
+      <Mapping Space="C-S" xmlns="http://schemas.microsoft.com/ado/2009/11/mapping/cs">
+        <EntityContainerMapping StorageEntityContainer="PENITENTIARYModelStoreContainer" CdmEntityContainer="PenitentiaryContext">
+          <EntitySetMapping Name="Crimes">
+            <EntityTypeMapping TypeName="PENITENTIARYModel.Crimes">
+              <MappingFragment StoreEntitySet="Crimes">
+                <ScalarProperty Name="CrimeID" ColumnName="CrimeID" />
+                <ScalarProperty Name="CrimeName" ColumnName="CrimeName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CriminalCases">
+            <EntityTypeMapping TypeName="PENITENTIARYModel.CriminalCases">
+              <MappingFragment StoreEntitySet="CriminalCases">
+                <ScalarProperty Name="CriminalCaseID" ColumnName="CriminalCaseID" />
+                <ScalarProperty Name="CriminalCase" ColumnName="CriminalCase" />
+                <ScalarProperty Name="JudicialCaseID" ColumnName="JudicialCaseID" />
+                <ScalarProperty Name="CrimeID" ColumnName="CrimeID" />
+                <ScalarProperty Name="DateEnd" ColumnName="DateEnd" />
+                <ScalarProperty Name="Sentence" ColumnName="Sentence" />
+                <ScalarProperty Name="DateMin" ColumnName="DateMin" />
+                <ScalarProperty Name="DateUpdate" ColumnName="DateUpdate" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="CriminalCourts">
+            <EntityTypeMapping TypeName="PENITENTIARYModel.CriminalCourts">
+              <MappingFragment StoreEntitySet="CriminalCourts">
+                <ScalarProperty Name="CriminalCourtID" ColumnName="CriminalCourtID" />
+                <ScalarProperty Name="CriminalCourtName" ColumnName="CriminalCourtName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Departaments">
+            <EntityTypeMapping TypeName="PENITENTIARYModel.Departaments">
+              <MappingFragment StoreEntitySet="Departaments">
+                <ScalarProperty Name="DepartamentID" ColumnName="DepartamentID" />
+                <ScalarProperty Name="DepartamentName" ColumnName="DepartamentName" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="JudicialCases">
+            <EntityTypeMapping TypeName="PENITENTIARYModel.JudicialCases">
+              <MappingFragment StoreEntitySet="JudicialCases">
+                <ScalarProperty Name="JudicialCaseID" ColumnName="JudicialCaseID" />
+                <ScalarProperty Name="CriminalCourtID" ColumnName="CriminalCourtID" />
+                <ScalarProperty Name="DepartamentID" ColumnName="DepartamentID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="PrisionerCases">
+            <EntityTypeMapping TypeName="PENITENTIARYModel.PrisionerCases">
+              <MappingFragment StoreEntitySet="PrisionerCases">
+                <ScalarProperty Name="PrisionerCasesID" ColumnName="PrisionerCasesID" />
+                <ScalarProperty Name="PrisionerID" ColumnName="PrisionerID" />
+                <ScalarProperty Name="CriminalCaseID" ColumnName="CriminalCaseID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="Prisoners">
+            <EntityTypeMapping TypeName="PENITENTIARYModel.Prisoners">
+              <MappingFragment StoreEntitySet="Prisoners">
+                <ScalarProperty Name="PrisonerID" ColumnName="PrisonerID" />
+                <ScalarProperty Name="CriminologicalCode" ColumnName="CriminologicalCode" />
+                <ScalarProperty Name="FileCode" ColumnName="FileCode" />
+                <ScalarProperty Name="FirstName" ColumnName="FirstName" />
+                <ScalarProperty Name="SecondName" ColumnName="SecondName" />
+                <ScalarProperty Name="Surname" ColumnName="Surname" />
+                <ScalarProperty Name="NationalID" ColumnName="NationalID" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+          <EntitySetMapping Name="History">
+            <EntityTypeMapping TypeName="PENITENTIARYModel.History">
+              <MappingFragment StoreEntitySet="History">
+                <ScalarProperty Name="HistoryID" ColumnName="HistoryID" />
+                <ScalarProperty Name="PrisonerID" ColumnName="PrisonerID" />
+                <ScalarProperty Name="Date" ColumnName="Date" />
+                <ScalarProperty Name="Type" ColumnName="Type" />
+                <ScalarProperty Name="Detail" ColumnName="Detail" />
+                <ScalarProperty Name="Comment" ColumnName="Comment" />
+              </MappingFragment>
+            </EntityTypeMapping>
+          </EntitySetMapping>
+        </EntityContainerMapping>
+      </Mapping>
+    </edmx:Mappings>
+  </edmx:Runtime>
+  <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <Connection>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="MetadataArtifactProcessing" Value="EmbedInOutputAssembly" />
+      </DesignerInfoPropertySet>
+    </Connection>
+    <Options>
+      <DesignerInfoPropertySet>
+        <DesignerProperty Name="ValidateOnBuild" Value="true" />
+        <DesignerProperty Name="EnablePluralization" Value="false" />
+        <DesignerProperty Name="IncludeForeignKeysInModel" Value="true" />
+        <DesignerProperty Name="UseLegacyProvider" Value="false" />
+        <DesignerProperty Name="CodeGenerationStrategy" Value="Ninguno" />
+      </DesignerInfoPropertySet>
+    </Options>
+    <!-- Diagram content (shape and connector positions) -->
+    <Diagrams></Diagrams>
+  </Designer>
+</edmx:Edmx>

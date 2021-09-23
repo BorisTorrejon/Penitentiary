@@ -1,0 +1,26 @@
+<?xml version="1.0" encoding="utf-8"?>
+<edmx:Edmx Version="3.0" xmlns:edmx="http://schemas.microsoft.com/ado/2009/11/edmx">
+ <!-- EF Designer content (DO NOT EDIT MANUALLY BELOW HERE) -->
+  <edmx:Designer xmlns="http://schemas.microsoft.com/ado/2009/11/edmx">
+    <!-- Diagram content (shape and connector positions) -->
+    <edmx:Diagrams>
+      <Diagram DiagramId="5c05fb03eac44002b4a81557e2db9f49" Name="Diagram1">
+        <EntityTypeShape EntityType="PENITENTIARYModel.Crimes" Width="1.5" PointX="2.5" PointY="3.125" IsExpanded="true" />
+        <EntityTypeShape EntityType="PENITENTIARYModel.CriminalCases" Width="1.5" PointX="5.125" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="PENITENTIARYModel.CriminalCourts" Width="1.5" PointX="7.5" PointY="3.5" IsExpanded="true" />
+        <EntityTypeShape EntityType="PENITENTIARYModel.Departaments" Width="1.5" PointX="7.5" PointY="5.625" IsExpanded="true" />
+        <EntityTypeShape EntityType="PENITENTIARYModel.JudicialCases" Width="1.5" PointX="5.125" PointY="4.75" IsExpanded="true" />
+        <EntityTypeShape EntityType="PENITENTIARYModel.PrisionerCases" Width="1.5" PointX="2.5" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="PENITENTIARYModel.Prisoners" Width="1.5" PointX="0.5" PointY="1" IsExpanded="true" />
+        <EntityTypeShape EntityType="PENITENTIARYModel.History" Width="1.5" PointX="0.5" PointY="4.5" IsExpanded="true" />
+        <AssociationConnector Association="PENITENTIARYModel.FK_CriminalCases_Crimes" ManuallyRouted="false" />
+        <AssociationConnector Association="PENITENTIARYModel.FK_CriminalCases_JudicialCases" ManuallyRouted="false" />
+        <AssociationConnector Association="PENITENTIARYModel.FK_PrisionerCases_CriminalCases" ManuallyRouted="false" />
+        <AssociationConnector Association="PENITENTIARYModel.FK_JudicialCases_CriminalCourts" ManuallyRouted="false" />
+        <AssociationConnector Association="PENITENTIARYModel.FK_JudicialCases_Departaments" ManuallyRouted="false" />
+        <AssociationConnector Association="PENITENTIARYModel.FK_PrisionerCases_Prisoners" ManuallyRouted="false" />
+        <AssociationConnector Association="PENITENTIARYModel.FK_History_Prisoners" ManuallyRouted="false" />
+      </Diagram>
+    </edmx:Diagrams>
+  </edmx:Designer>
+</edmx:Edmx>
